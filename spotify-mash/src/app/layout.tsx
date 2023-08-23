@@ -1,6 +1,8 @@
+import Navbar from 'a/components/navbar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import NextAuthProvider from 'a/components/NextAuthProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,8 +17,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" >
+      <body className={`${inter.className} bg-slate-800`} >
+        <NextAuthProvider>
+          <Navbar />
+        </NextAuthProvider>
+        {children}
+      </body>
     </html>
   )
 }
