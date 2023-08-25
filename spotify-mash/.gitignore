@@ -36,3 +36,8 @@ next-env.d.ts
 
 #http test api endpoint
 spotify-api*
+
+#dockerfile
+.devcontainer
+dockerfile
+docker-compose.yml
