@@ -5,10 +5,10 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
 
-    webpack: (config, context) => {
+    webpack: (config) => {
         config.watchOptions = {
-            poll: 1000,
-            aggregateTimeout: 300
+            poll: 5000,
+            aggregateTimeout: 100
         }
         return config
     }

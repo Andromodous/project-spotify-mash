@@ -38,6 +38,5 @@ next-env.d.ts
 spotify-api*
 
 #dockerfile
-.devcontainer
 dockerfile
 docker-compose.yml

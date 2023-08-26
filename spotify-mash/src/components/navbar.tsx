@@ -12,7 +12,7 @@ const Navbar = () => {
       <div className='flex items-center justify-between'>
         <h1 className='sm:text-3xl font-extrabold text-slate-900/75 tracking-tight dark:text-slate-200'>
           Spotify Mash
-          {session?.user?.name}
+          {/* {session?.user?.name} */}
         </h1>
         {status == 'authenticated' && <p className='sm:text font-bold'>welcome {session.user?.name}</p>}
         <ul className='flex gap-6 p-2 justiy-start text-md border-solid border-2'>
