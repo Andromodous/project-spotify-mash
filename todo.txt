@@ -1,0 +1,3 @@
+- learn the interface/ type for spotify tracks for type support and safety
+- redo the logic flow so users must sign in at first load then access there 'dashboard'
+- figure out how to visualize user data 
