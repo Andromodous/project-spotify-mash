@@ -1,3 +1,7 @@
-- learn the interface/ type for spotify tracks for type support and safety
+- learn the interface/ type for spotify tracks for type support and safety ✅
+- display user data of most listened to songs ✅
 - redo the logic flow so users must sign in at first load then access there 'dashboard'
 - figure out how to visualize user data 
+
+mistakes
+- I spent a whole day trying to figure out why I keep getting the wrong api data. It was because I was fetching from the wrong endpoint 

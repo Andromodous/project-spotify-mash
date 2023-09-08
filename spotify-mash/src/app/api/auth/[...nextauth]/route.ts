@@ -43,9 +43,7 @@ export const authOption: NextAuthOptions = {
 
                         })
                     });
-                    console.log(`hello world`);
                     const tokens = await response.json()
-                    console.log('the token is: ', tokens)
                     if (!response.ok) throw tokens;
 
                     const { access_token } = await prisma.account.update({
@@ -63,7 +61,6 @@ export const authOption: NextAuthOptions = {
                             }
                         }
                     });
-                    console.log(`the access token is ${access_token}`);
                     session.accessToken = access_token as string
 
                 }
