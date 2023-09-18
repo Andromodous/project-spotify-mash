@@ -21,8 +21,8 @@ export default function RootLayout({
       <body className={`${inter.className} bg-slate-800`} >
         <NextAuthProvider>
           <Navbar />
-        </NextAuthProvider>
         {children}
+        </NextAuthProvider>
       </body>
     </html>
   )

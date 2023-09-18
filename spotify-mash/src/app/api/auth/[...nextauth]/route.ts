@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "../../../lib/prisma"
-import NextAuth, { NextAuthOptions, TokenSet } from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import SpotifyProvider from "next-auth/providers/spotify"
 import { Adapter } from "next-auth/adapters"
 

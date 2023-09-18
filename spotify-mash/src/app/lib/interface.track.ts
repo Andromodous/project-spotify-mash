@@ -15,6 +15,7 @@ export interface Track {
     album: Album,
     artists: {
         name: string,
+        id: string
     }[],
     external_urls: {
         spotify: string
