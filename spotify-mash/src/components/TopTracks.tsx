@@ -9,7 +9,7 @@ export async function ListTopSongs() {
     const session = await getServerSession(authOption);
     let res: Track[] = [];
     try {
-        const favourite_artists: Response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10`, {
+        const favourite_artists: Response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=20`, {
             // next: { revalidate: 3600 },
             method: 'GET',
             headers: {

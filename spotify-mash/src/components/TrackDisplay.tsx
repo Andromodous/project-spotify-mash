@@ -30,9 +30,10 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                 width={30}
                 height={30} /> */}
 
-            <div className='flex flex-row-reverse p-2'>
+            <form id='track-order' className='flex flex-row-reverse p-2'>
                 <select
                     className="rounded-md sm:w-full md:w-1/4 hover:cursor-pointer bg-inherit p-2 shadow-lg border border-stone-800 focus    :border-stone-800 font-sans"
+                    title='track order'
                     value={order}
                     onChange={(e) => {
                         setOrder(e.target.value)
@@ -41,13 +42,15 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                     <option className='bg-stone-300 hover:bg-stone-100' value='popularity'>popularity</option>
                     <option className='bg-stone-300 hover:bg-stone-100' value='alphabetical'>alphabetical</option>
                 </select>
-            </div>
+            </form>
             {topTracks.map((info, index) => {
                 const props = {
                     Track: info,
                     rank: (index + 1)
                 }
-                return <Song key={info.id} {...props} />
+                return <div key={info.id}>
+                    <Song key={info.id} {...props} />
+                </div>
             })
             }
         </div>

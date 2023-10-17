@@ -10,7 +10,7 @@ export async function About() {
   let res: Track[] = [];
   let artists = new Map<string, string>()
   try {
-    const favourite_artists: Response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=10`, {
+    const favourite_artists: Response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=20`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${session?.accessToken}`,
@@ -28,7 +28,6 @@ export async function About() {
         artists.set(name, id)
       }
     });
-    console.log(artists)
   }
   catch (error: any) {
     return (

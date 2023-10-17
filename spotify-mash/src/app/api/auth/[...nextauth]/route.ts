@@ -21,14 +21,16 @@ export const authOption: NextAuthOptions = {
             }
             return token
         },
-
         async session({ session, user }) {
             const account = await prisma.account.findFirst({
+
                 where: {
-                    userId: user.id, provider: 'spotify'
+                    userId: user.id
                 }
+
             });
             if (account != null && account.expires_at as number * 1000 < Date.now()) {
+                // If the access token has expired, try to refresh it
                 try {
                     const basicAuth = btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`);
                     const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -62,7 +64,6 @@ export const authOption: NextAuthOptions = {
                         }
                     });
                     session.accessToken = access_token as string
-
                 }
                 catch (e) {
                     console.log(`cannot refresh access token: ${e}`)

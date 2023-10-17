@@ -22,7 +22,7 @@ export const Song = ({ Track, rank }: { Track: Track, rank: number }) => {
                         </>
                     ))}
                     |
-                    <span className='text-red-800 font-bold'>{popularity}</span>
+                    <span className='text-red-800 font-bold'> {popularity}</span>
                 </h3>
                 <div className='flex items-center gap-2 text-xs text-slate-500'>
                     <Calendar color='grey' /> {release_date}
