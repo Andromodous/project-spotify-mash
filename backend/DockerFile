@@ -1,0 +1,15 @@
+FROM node:alpine
+
+WORKDIR /app
+
+COPY package*.json /app
+
+RUN apk update
+
+RUN npm install && npm i typescript -g 
+
+COPY . /app
+
+EXPOSE 3001
+
+

@@ -22,10 +22,7 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
     }, [order])
 
     return (
-        <div className='flex flex-col gap-1 py-2'>
-            <h2 className='font-bold text-xl text-center underline decoration-sky-500/30'>
-                Your Favourite Songs
-            </h2>
+        <>
             {/* <Image className='rounded-full mx-auto' src={session?.user?.image as string} alt='user profile'
                 width={30}
                 height={30} /> */}
@@ -53,6 +50,6 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                 </div>
             })
             }
-        </div>
+        </>
     )
 }

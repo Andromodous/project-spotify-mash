@@ -3,7 +3,7 @@ import { Track } from 'a/app/lib/interface.track'
 import { TrackDisplay } from 'a/components/TrackDisplay'
 import { GenreInsights } from 'a/components/GenreInsights'
 import { getServerSession } from 'next-auth'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 export async function About() {
   const session = await getServerSession(authOption);
@@ -39,10 +39,21 @@ export async function About() {
   }
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 min-h-screen gap-'>
-      {/* npx prisma studio for access token */}
-      <TrackDisplay tracks={res} />
-      <div>
-        <GenreInsights favArtists={artists} />
+      <div className='flex flex-col gap-1 py-2'>
+        <h2 className='font-bold text-xl text-center underline decoration-sky-500/30'>
+          Your Favourite Songs
+        </h2>
+        <Suspense fallback={<h1>Your tracks are loading</h1>}>
+          <TrackDisplay tracks={res} />
+        </Suspense>
+      </div>
+      <div className='flex flex-col gap-1 py-2'>
+        <h2 className='font-bold text-xl text-center underline decoration-sky-500/30'>
+          Genre Insights
+        </h2>
+        <Suspense fallback={<h1>Your tracks are loading</h1>}>
+          <GenreInsights favArtists={artists} />
+        </Suspense>
       </div>
     </div>
   )

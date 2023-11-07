@@ -11,13 +11,13 @@ services:
     container_name: web
     restart: always
     environment:
-      SPOTIFY_CLIENT_ID: YOUR_CLIENT_ID
-      SPOTIFY_CLIENT_SECRET: YOUR_CLIENT_SECRET
+      SPOTIFY_CLIENT_ID: YOUR CLIENT ID
+      SPOTIFY_CLIENT_SECRET: YOUR CLIENT SECRET
       NODE_ENV: development
+      REDIS_URL: redis://@redis:6379
       DATABASE_URL: postgresql://root:root@db:5432/postgres?schema=public
       NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: YOUR_NEXTAUTH_SECRET
-      REDIS_URL: redis://@redis:6379
+      NEXTAUTH_SECRET: YOUR NEXTAUTH SECRET
     volumes:
       - ./spotify-mash/src:/app/src
       - ./spotify-mash/package.json:/app/package.json
@@ -46,6 +46,18 @@ services:
     container_name: redis_server
     ports:
       - 6379:6379
-
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    command: sleep infinite
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports: 
+      - 3001:3000
+    environment:
+      REDIS_URL: redis://@redis:6379
 volumes:
   postgres-data:

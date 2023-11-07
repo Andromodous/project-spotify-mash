@@ -15,16 +15,10 @@ export const GenreChart = ({ genrestats }: { genrestats: Map<string, number> }) 
             label: 'times',
             data: Array.from(genrestats.values()) as any[],
             borderWidth: 1
-        }
-        ]
+        }]
     }
 
     return (
-        <div className='flex flex-col gap-1 py-2'>
-            <h2 className='font-bold text-xl text-center underline decoration-sky-500/30'>
-                Genre Insights
-            </h2>
-            <Doughnut data={user_data} />
-        </div>
+        <Doughnut data={user_data} />
     )
 }
