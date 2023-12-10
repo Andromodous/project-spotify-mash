@@ -10,13 +10,12 @@ services:
       dockerfile: Dockerfile
     container_name: web
     environment:
-      SPOTIFY_CLIENT_ID: 0c4be8bf30024d59bf0794481a8011d5
-      SPOTIFY_CLIENT_SECRET: 469f33636c2241288a0a6e1a981030cd
+      SPOTIFY_CLIENT_ID: YOUR CLIENT ID 
+      SPOTIFY_CLIENT_SECRET: YOUR CLIENT SECRET
       NODE_ENV: development
       REDIS_URL: redis://@redis:6379
-      DATABASE_URL: postgresql://root:root@db:5432/postgres?schema=public
       NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: sSxmLn5g68x9V3fyzSScXKBQ9ltIFw12Vlv8qJvCkX0=
+      NEXTAUTH_SECRET: YOUR NEXTAUTH SECRET
     volumes:
       - ./spotify-mash/src:/app/src
       - ./spotify-mash/package.json:/app/package.json
@@ -26,20 +25,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - db
       - redis
-  db:
-    image: postgres:latest
-    container_name: postgres-db
-    restart: unless-stopped
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: root
-      POSTGRES_DB: postgres
-    ports:
-      - 5432:5432
   redis:
     image: redis:latest
     container_name: redis_server
@@ -69,6 +55,3 @@ services:
     environment:
       REDIS_HOST_NAME: redis
       REDIS_PORT_NUMBER: 6379
-
-volumes:
-  postgres-data:
