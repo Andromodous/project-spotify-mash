@@ -7,6 +7,7 @@ import { Track } from 'a/app/lib/interface.track'
 export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
     const [order, setOrder] = useState<string>('');
     const [topTracks, setTopTracks] = useState<Track[]>(tracks)
+    const [popularityAverage, setPopularityAverage] = useState<number>(0);
 
     useEffect(() => {
         switch (order) {
@@ -20,14 +21,21 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                 setTopTracks(tracks)
         }
     }, [order])
+    useEffect(() => {
+        let popularity = 0
+        for (const track of tracks) {
+            popularity += track.popularity
+        }
+        setPopularityAverage(popularity / tracks.length)
+    })
 
     return (
         <>
-            {/* <Image className='rounded-full mx-auto' src={session?.user?.image as string} alt='user profile'
-                width={30}
-                height={30} /> */}
-
-            <form id='track-order' className='flex flex-row-reverse p-2'>
+            <form id='track-order' className='flex p-2 justify-between items-center'>
+                {
+                    popularityAverage > 0 &&
+                    <p>average | <span className='text-red-800 font-bold'>{popularityAverage}</span></p>
+                }
                 <select
                     className="rounded-md sm:w-full md:w-1/4 hover:cursor-pointer bg-inherit p-2 shadow-lg border border-stone-800 focus    :border-stone-800 font-sans"
                     title='track order'

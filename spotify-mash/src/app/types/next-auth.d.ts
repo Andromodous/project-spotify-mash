@@ -1,5 +1,6 @@
-import { DefaultSession } from "next-auth"
 import { JWT } from "next-auth/jwt"
+import { Auth } from "@auth/core"
+
 
 
 declare module "next-auth" {
@@ -14,6 +15,8 @@ declare module "next-auth" {
 
 declare module 'next-auth/jwt' {
     interface JWT {
-        accessToken?: string
+        accessToken: string | undefined
+        expires_at: number | undefined
+        refresh_token: string | undefined
     }
 }

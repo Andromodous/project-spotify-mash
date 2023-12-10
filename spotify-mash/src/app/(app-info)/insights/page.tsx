@@ -5,7 +5,7 @@ import { GenreInsights } from 'a/components/GenreInsights'
 import { getServerSession } from 'next-auth'
 import React, { Suspense } from 'react'
 
-export async function About() {
+export default async function About() {
   const session = await getServerSession(authOption);
   let res: Track[] = [];
   let artists = new Map<string, string>()
@@ -58,5 +58,3 @@ export async function About() {
     </div>
   )
 }
-
-export default About

@@ -1,4 +1,5 @@
 import Navbar from 'a/components/navbar'
+import { Footer } from 'a/components/Footer'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -23,6 +24,7 @@ export default function RootLayout({
           <Navbar />
         {children}
         </NextAuthProvider>
+        <Footer />
       </body>
     </html>
   )

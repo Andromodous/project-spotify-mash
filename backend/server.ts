@@ -20,8 +20,7 @@ const io = new Server(server, {
 const port = process.env.PORT || 3000;
 const subscriber = new Redis(process.env.REDIS_URL as string);
 
-console.log(`redis is ${process.env.REDIS_URL}`);
-console.log(`this works`);
+var data = '';
 
 subscriber.subscribe('artists:leaderboard', (err) => {
     if (err) {
@@ -33,7 +32,12 @@ io.on('connection', (socket: Socket) => {
     console.log(`new socket connected ${socket.id}`)
     console.log(`number of clients connections is ${io.engine.clientsCount}`);
 
+    if (data !== '') {
+        socket.emit('message', data);
+    }
+
     subscriber.on('message', (channel, message) => {
+        data = message;
         if (socket.connected) {
             console.log(`${socket.id}: new message from ${channel}: ${message}`);
             socket.emit('message', message);
@@ -43,20 +47,8 @@ io.on('connection', (socket: Socket) => {
         console.log(`socket disconnected: ${reason}`);
         socket.disconnect(true)
     });
-
-    // socket.on('vote', (data) => {
-    //     const voted = redis.sismember('leaderboard:voted', 'example').then((result) => result == 1 ? true : false); //1 (means true, and if it's 0, it means false)
-    //     voted.then((vote) => {
-    //         if (vote) {
-
-    //         }
-    //     })
-    // });
 })
-// instrument(io, {
-//     auth: false,
-//     mode: "development",
-// });
+
 
 server.listen(port, () => console.log(`WebSocket Server online at port: ${port}`));
 

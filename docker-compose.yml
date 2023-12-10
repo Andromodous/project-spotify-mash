@@ -9,15 +9,14 @@ services:
       context: ./spotify-mash #context tells docker where to look for dockerFile. If it /frontend then write frontend
       dockerfile: Dockerfile
     container_name: web
-    restart: always
     environment:
-      SPOTIFY_CLIENT_ID: YOUR CLIENT ID
-      SPOTIFY_CLIENT_SECRET: YOUR CLIENT SECRET
+      SPOTIFY_CLIENT_ID: 0c4be8bf30024d59bf0794481a8011d5
+      SPOTIFY_CLIENT_SECRET: 469f33636c2241288a0a6e1a981030cd
       NODE_ENV: development
       REDIS_URL: redis://@redis:6379
       DATABASE_URL: postgresql://root:root@db:5432/postgres?schema=public
       NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: YOUR NEXTAUTH SECRET
+      NEXTAUTH_SECRET: sSxmLn5g68x9V3fyzSScXKBQ9ltIFw12Vlv8qJvCkX0=
     volumes:
       - ./spotify-mash/src:/app/src
       - ./spotify-mash/package.json:/app/package.json
@@ -51,7 +50,7 @@ services:
     build:
       context: ./backend
       dockerfile: DockerFile
-    command: sleep infinite
+    command: node server.js
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -59,5 +58,17 @@ services:
       - 3001:3000
     environment:
       REDIS_URL: redis://@redis:6379
+  function:
+    container_name: cloud-function
+    image: python:3.12.0-bullseye
+    ports:
+     - 8080:8080
+    volumes:
+      - ./cloud-function:/workspace:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment:
+      REDIS_HOST_NAME: redis
+      REDIS_PORT_NUMBER: 6379
+
 volumes:
   postgres-data:

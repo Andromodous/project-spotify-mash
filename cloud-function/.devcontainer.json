@@ -1,0 +1,15 @@
+{
+    "name": "cloud-function",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "function",
+    // "shutdownAction": "none",
+    "postCreateCommand": "pip install -r function/requirements.txt",
+    "features": {
+        "ghcr.io/dhoeric/features/google-cloud-cli:1": {}
+    },
+    // Open the sub-folder with the source code
+    "workspaceFolder": "/workspace",
+    "remoteUser": "root"
+}

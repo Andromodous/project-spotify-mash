@@ -31,8 +31,6 @@ export async function ListTopSongs() {
         )
     }
     return (
-        <>
         <TrackDisplay tracks={res} />
-        </>
     )
 }

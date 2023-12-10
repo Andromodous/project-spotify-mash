@@ -53,9 +53,9 @@ export const ArtistLeaderboard = ({ labels, scores }: { labels: string[], scores
     }
 
     return (
-        <>
-            <Bar options={options} data={data} />
-        </>
+        <section className='w-full sm:w-4/6 items-center mx-auto'>
+        <Bar options={options} data={data} />
+        </section>
     )
 
 }
