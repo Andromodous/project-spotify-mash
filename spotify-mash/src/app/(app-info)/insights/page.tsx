@@ -49,7 +49,7 @@ export default async function About() {
       </div>
       <div className='flex flex-col gap-1 py-2'>
         <h2 className='font-bold text-xl text-center underline decoration-sky-500/30'>
-          Genre Insights
+          Your Genre Insights
         </h2>
         <Suspense fallback={<h1>Your tracks are loading</h1>}>
           <GenreInsights favArtists={artists} />

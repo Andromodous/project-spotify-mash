@@ -5,7 +5,7 @@ import { Song } from 'a/components/Song'
 import { Track } from 'a/app/lib/interface.track'
 
 export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
-    const [order, setOrder] = useState<string>('');
+    const [order, setOrder] = useState<string>('sort');
     const [topTracks, setTopTracks] = useState<Track[]>(tracks)
     const [popularityAverage, setPopularityAverage] = useState<number>(0);
 
@@ -21,13 +21,14 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                 setTopTracks(tracks)
         }
     }, [order])
+    
     useEffect(() => {
         let popularity = 0
         for (const track of tracks) {
             popularity += track.popularity
         }
         setPopularityAverage(popularity / tracks.length)
-    })
+    }, [])
 
     return (
         <>
@@ -43,7 +44,7 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                     onChange={(e) => {
                         setOrder(e.target.value)
                     }}>
-                    <option className='bg-stone-300 hover:bg-stone-100' value=''>sort</option>
+                    <option className='bg-stone-300 hover:bg-stone-100' value='sort'>sort</option>
                     <option className='bg-stone-300 hover:bg-stone-100' value='popularity'>popularity</option>
                     <option className='bg-stone-300 hover:bg-stone-100' value='alphabetical'>alphabetical</option>
                 </select>
@@ -53,9 +54,9 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
                     Track: info,
                     rank: (index + 1)
                 }
-                return <div key={info.id}>
+                return (
                     <Song key={info.id} {...props} />
-                </div>
+                )
             })
             }
         </>

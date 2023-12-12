@@ -56,11 +56,12 @@ export default function Home() {
     try {
       const store = localStorage.getItem('s2EupNhv71RuhVDJ')
       if (typeof store === 'string') {
-        const poll_data : Poll = JSON.parse(store);
+        const poll_data: Poll = JSON.parse(store);
         if (typeof poll_data.time === 'number' && poll_data.time > (new Date().getTime() / 1000)) { //current poll not yet expired
           const date = new Date(poll_data.time as number * 1000)
           const [year, month, day] = [date.getFullYear(), date.getMonth() + 1, date.getUTCDate()]
           setPollEnd(`${day}-${month}-${year}`)
+
           const polls = poll_data.past_results
           if (polls instanceof Array && polls.every((x) => isWinner(x))) {
             setPastPolls(polls as Winner[]) //limitation of typescript inference

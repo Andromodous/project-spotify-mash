@@ -1,5 +1,4 @@
 import { Redis } from 'ioredis'
-import { NextRequest } from 'next/server'
 
 // export const dynamic = 'auto'
 export async function GET() {
@@ -9,12 +8,11 @@ export async function GET() {
     // }
     const redis = new Redis(process.env.REDIS_URL as string)
     try {
-        let time : number = 0
+        let time: number = 0
         let polls: string[] = []
 
         await Promise.all([redis.get("artists:leaderboard:expire"), redis.lrange('artists:leaderboard:past', 0, -1)])
             .then((x) => {
-                // console.log('expires at: ', x[0], ' leaderboard: ', [1], ' success') // ✅✅
                 if (typeof x[0] === 'string') {
                     time = parseInt(x[0])
                 }
