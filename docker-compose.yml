@@ -9,18 +9,18 @@ services:
       context: ./spotify-mash #context tells docker where to look for dockerFile. If it /frontend then write frontend
       dockerfile: Dockerfile
     container_name: web
+    command: sleep infinite
     environment:
-      SPOTIFY_CLIENT_ID: YOUR CLIENT ID 
-      SPOTIFY_CLIENT_SECRET: YOUR CLIENT SECRET
-      NODE_ENV: development
-      REDIS_URL: redis://@redis:6379
+      NODE_ENV: production
+      NEXTAUTH_SECRET: 7nVuq++42yjHTSJ6FG9h0I5dMjM3bj3+b/fv92/2Bqc=
       NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: YOUR NEXTAUTH SECRET
+      SPOTIFY_CLIENT_ID: YOUR SPOTIFY CLIENT ID
+      SPOTIFY_CLIENT_SECRET: YOUR SPOTIFY CLIENT SECRET
     volumes:
+      - ./spotify-mash/public:/app/public
       - ./spotify-mash/src:/app/src
       - ./spotify-mash/package.json:/app/package.json
       - /app/node_modules
-      - /app/.next
       - ./spotify-mash/next.config.js:/app/next.config.js
     ports:
       - 3000:3000
@@ -36,11 +36,11 @@ services:
     build:
       context: ./backend
       dockerfile: DockerFile
-    command: node server.js
+    command: sleep infinite
     volumes:
       - ./backend:/app
       - /app/node_modules
-    ports: 
+    ports:
       - 3001:3000
     environment:
       REDIS_URL: redis://@redis:6379
@@ -48,10 +48,7 @@ services:
     container_name: cloud-function
     image: python:3.12.0-bullseye
     ports:
-     - 8080:8080
+      - 8080:8080
     volumes:
       - ./cloud-function:/workspace:cached
     command: /bin/sh -c "while sleep 1000; do :; done"
-    environment:
-      REDIS_HOST_NAME: redis
-      REDIS_PORT_NUMBER: 6379
