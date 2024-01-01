@@ -1,0 +1,21 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# web/nextjs dependencies/files and development artifacts
+/spotify-mash/node_modules
+/spotify-mash/.pnp
+/spotify-mash/.pnp.js
+/spotify-mash/.next/
+/spotify-mash/spotify-api.http
+/spotify-mash/next-env.d.ts
+
+#backend development artifacts
+/backend/dist
+/backend/node_modules
+
+#cloud function development artifacts
+/cloud-function/.vscode/
+/cloud-function/function/__pycache__
+cloud-function/function/.env.yaml
+
+#tasks
+/tasks

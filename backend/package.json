@@ -18,7 +18,8 @@
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
-    "@socket.io/admin-ui": "^0.5.1",
-    "@types/ioredis": "^5.0.0"
+    "@types/ioredis": "^5.0.0",
+    "typescript": "^5.3.3"
+
   }
 }

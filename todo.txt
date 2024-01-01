@@ -2,6 +2,11 @@
 - display user data of most listened to songs ✅
 - redo the logic flow so users must sign in at first load then access there 'dashboard'
 - figure out how to visualize user data 
+- explore ways to overcome making many api requests for fetching genre of artists. (redis or batch requests)
 
 mistakes
 - I spent a whole day trying to figure out why I keep getting the wrong api data. It was because I was fetching from the wrong endpoint 
+- reconsidering my original approach which was fetching from tracks endpoint to atrists endpoint that contains artists genre. artist object in track originally contained genre, but not longer does
+
+- request new credentials from spotify
+- test case for when time expires from local storage ✅

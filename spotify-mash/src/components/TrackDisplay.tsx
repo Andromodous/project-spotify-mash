@@ -35,7 +35,7 @@ export const TrackDisplay = ({ tracks }: { tracks: Track[] }) => {
             <form id='track-order' className='flex p-2 justify-between items-center'>
                 {
                     popularityAverage > 0 &&
-                    <p>average | <span className='text-red-800 font-bold'>{popularityAverage}</span></p>
+                    <p>average popularity | <span className='text-red-800 font-bold'>{popularityAverage}</span></p>
                 }
                 <select
                     className="rounded-md sm:w-full md:w-1/4 hover:cursor-pointer bg-inherit p-2 shadow-lg border border-stone-800 focus    :border-stone-800 font-sans"

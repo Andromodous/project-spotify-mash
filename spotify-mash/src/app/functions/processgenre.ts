@@ -1,3 +1,5 @@
+import { Artist } from "../lib/interface.artist"
+
 export function processGenre(artists: Artist[]): Map<string, number> {
     let genres = new Map<string, number>()
 

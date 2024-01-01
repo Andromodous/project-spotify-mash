@@ -1,5 +1,5 @@
 {
-  "name": "spotify-mash",
+  "name": "musical-mash",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/node": "20.4.10",
-    "@types/react": "18.2.20",
-    "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "chart.js": "^4.4.0",
     "ioredis": "^5.3.2",
@@ -21,8 +18,15 @@
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "sharp": "^0.33.1",
     "socket.io-client": "^4.7.2",
-    "tailwindcss": "3.3.3",
+    "supports-color": "^8.1.1",
+    "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.10",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
     "typescript": "5.1.6"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",

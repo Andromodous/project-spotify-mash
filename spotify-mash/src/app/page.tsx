@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { initSocket } from 'a/app/lib/socket'
 import { processArtist } from './functions/processArtist'
 import { ArtistLeaderboard } from 'a/components/ArtistLeaderboard'
@@ -10,6 +10,8 @@ import { Poll } from 'a/app/lib/interface.poll'
 import { isWinner } from 'a/app/lib/guard.winner'
 import { WinnersBanner } from 'a/components/WinnersBanner'
 import { useSession } from 'next-auth/react'
+
+export const dynamic = 'force-dynamic'
 
 export default function Home() {
   //https://react-chartjs-2.js.org/examples/horizontal-bar-chart/
@@ -63,7 +65,7 @@ export default function Home() {
           setPollEnd(`${day}-${month}-${year}`)
 
           const polls = poll_data.past_results
-          if (polls instanceof Array && polls.every((x) => isWinner(x))) {
+          if (polls instanceof Array && polls.every((x: Winner | any) => isWinner(x))) {
             setPastPolls(polls as Winner[]) //limitation of typescript inference
           }
         }

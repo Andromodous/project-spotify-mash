@@ -1,15 +1,20 @@
-import { Redis } from 'ioredis'
+import Redis from 'ioredis'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
+export const dynamic = 'force-dynamic'
+
+export async function POST(request: NextRequest) {
     const data = await request.json();
     var { userId, artist } = data;
 
     //add some randomness here to avoid resource stampede
     const delay = Math.floor(Math.random() * 5000)
     new Promise((resolve) => setTimeout(resolve, delay))
-    console.log(`the delay was ${delay}`);
 
-    const redis = new Redis(process.env.REDIS_URL as string); //initialize redis client instance
+    const [redis_port, redis_host, redis_password] = [process.env.REDIS_PORT || 6379, process.env.REDIS_HOST || 'redis', process.env.REDIS_PASSWORD || '']
+    const redis = new Redis(typeof redis_port === "string" ? parseInt(redis_port) : redis_port, redis_host, {
+        password: redis_password
+    })
 
     try {
         //sanatize input
@@ -41,12 +46,12 @@ export async function POST(request: Request) {
         await redis.publish('artists:leaderboard', JSON.stringify(leaderboard));
         console.log("Published updated leaderboard");
 
-        return Response.json({ voted: true }, { status: 200 }); //successful
+        return NextResponse.json({ voted: true }, { status: 200 }); //successful
     }
     catch (e) {
         console.log(`${e}`);
         if (e instanceof Error) {
-            return Response.json({ error: e.message }, { status: 404 });
+            return NextResponse.json({ error: e.message }, { status: 404 });
         }
     }
     finally {

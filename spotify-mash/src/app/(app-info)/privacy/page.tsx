@@ -7,23 +7,20 @@ export default function Privacy() {
             <div className='w-3/6 text-justify'>
                 <h3>Terms and Conditions:</h3><br></br>
 
-                Welcome to Spotify-Mash! By using our service, you agree to the following terms and conditions.
+                Musical Mash Privacy Policy
+                Effective Date: December 16, 2023
+                <br />
+                Welcome to Musical Mash! This Privacy Policy ("Policy")
+                explains how we collect, use, and share your information when you use our application. 
+                Please read this Policy carefully before using Musical Mash.<br />
 
-                Usage: Spotify-Mash is a music recommendation service that does not store any personal information of its users.
+                IMPORTANT DISCLAIMER: <br />
 
-                Data Handling: We do not collect, store, or share any personal data including names, email addresses, or any other identifiable information.
+                Musical Mash is not affiliated with or endorsed by "Spotify"  in any way. We are an independent application and all rights to the Spotify name and brand belong solely to Spotify AB.<br />
+                Certain features of Musical Mash require user authentication with your Spotify account. This is necessary to access your Spotify data and preferences like music history for application functionality.
+                We do not store or retain any of your Spotify authentication or personal data associated with your Spotify account. Personal and account data associated with your Spotify Account are strictly not shared among 3rd parties.<br />
+                The application is open sourced and can be viewed for further scrutiny <a href="https://github.com/Andromodous/project-spotify-mash/tree/main/spotify-mash" className='underline-offset-1 text-sky-700'>here</a>
 
-                Music Recommendations: Our service uses anonymized data to provide personalized music recommendations based on your listening preferences.
-
-                Cookies: We may use cookies for the sole purpose of enhancing user experience and improving our service. These cookies do not contain any personal information.
-
-                Changes to Terms: Spotify-Mash reserves the right to modify these terms and conditions at any time. Users will be notified of any changes via the website or email.
-
-                Disclaimer: Spotify-Mash does not take responsibility for any external content linked through our service.
-
-                By using Spotify-Mash, you agree to abide by these terms and conditions. If you do not agree with any part of these terms, please refrain from using our service.
-
-                Please note that the above text is for general information purposes only and may need further refinement or legal consultation for actual use.
             </div>
         </section>
     )

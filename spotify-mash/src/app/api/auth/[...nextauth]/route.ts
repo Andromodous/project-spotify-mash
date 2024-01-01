@@ -1,10 +1,12 @@
 import NextAuth, { NextAuthOptions, TokenSet } from "next-auth"
 import SpotifyProvider from "next-auth/providers/spotify"
 
+export const dynamic = 'force-dynamic'
+
 export const authOption: NextAuthOptions = {
     session: {
         strategy: 'jwt',
-        maxAge: 60 * 60 * 24 * 7 //session no longer valid after a week
+        maxAge: 60 * 60 * 24 * 1 //session no longer valid after a day
     },
     secret: process.env.NEXTAUTH_SECRET,
     providers: [
@@ -27,7 +29,7 @@ export const authOption: NextAuthOptions = {
             }
             //case where token has not expired and subsequent invocations
             else if (typeof token.expires_at === 'number' && (Date.now() / 1000) < token.expires_at) {
-                console.log(token) // ✅✅
+                // console.log(token) // ✅✅
                 return token
             }
             else {
@@ -61,7 +63,7 @@ export const authOption: NextAuthOptions = {
         },
         async session({ token, session }) {
             session.accessToken = token.accessToken
-            console.log(session)
+            // console.log(session)
             return session
         }
     }

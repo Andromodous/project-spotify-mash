@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { processGenre } from 'a/app/functions/processgenre'
 import { GenreChart } from 'a/components/GenreChart'
 import React from 'react'
+import { Artist } from 'a/app/lib/interface.artist'
 
 export const GenreInsights = async ({ favArtists }: { favArtists: Map<string, string> }) => {
     const session = await getServerSession(authOption);

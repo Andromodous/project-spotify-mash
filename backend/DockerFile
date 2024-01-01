@@ -4,9 +4,7 @@ WORKDIR /app
 
 COPY package*.json /app
 
-RUN apk update
-
-RUN npm install && npm i typescript -g 
+RUN apk update && npm install
 
 COPY . /app
 
