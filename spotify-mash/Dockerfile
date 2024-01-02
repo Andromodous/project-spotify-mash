@@ -7,12 +7,9 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json
 # to the /app working directory
-COPY package*.json /app
+COPY package*.json tsconfig*.json tailwind.config.ts /app/
 
-RUN apk update
-
-# Install dependencies in /app
-RUN npm install
+RUN apk update && npm install
 
 #Copy the rest of our Next.js folder into /app
 #copy in our source code last, as it changes the most
