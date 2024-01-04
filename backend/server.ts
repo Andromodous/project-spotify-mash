@@ -18,11 +18,13 @@ const io = new Server(server, {
 });
 const port = process.env.PORT || 3000;
 const redis_port = process.env.REDIS_PORT || 6379
-const subscriber = new Redis(typeof redis_port === "string" ? parseInt(redis_port) : redis_port, process.env.REDIS_HOST || 'redis', {
+const subscriber = new Redis(typeof redis_port === "string" ?
+    parseInt(redis_port) : redis_port, process.env.REDIS_HOST || 'redis', {
     password: process.env.REDIS_PASSWORD || ''
 })
-var data = '';
-subscriber.ping().then((v) => console.log('connected to redis ' + v)).catch(() => console.log('could not connect'))
+if (subscriber.status === 'connect' || subscriber.status === 'ready') {
+    console.log('connected to redis')
+}
 
 subscriber.subscribe('artists:leaderboard', (err) => {
     if (err) {
@@ -34,25 +36,34 @@ io.on('connection', (socket: Socket) => {
     console.log(`new socket connected ${socket.id}`)
     console.log(`number of clients connections is ${io.engine.clientsCount}`);
 
-    if (data !== '') {
-        socket.emit('message', data);
-    }
-
     subscriber.on('message', (channel, message) => {
-        data = message;
         if (socket.connected) {
             console.log(`${socket.id}: new message from ${channel}: ${message}`);
             socket.emit('message', message);
         }
     });
+
     socket.on("disconnect", (reason) => {
+
         console.log(`socket ${socket.id} disconnected: ${reason}`);
         socket.disconnect(true)
     });
+
 })
 
 
-server.listen(port, () => console.log(`WebSocket Server online at port: ${port}`));
+process.on('SIGTERM', () => { //SIGTERM signal received by cloud run to handle scaled down instances
+    console.log('gracefully shutting down')
+    subscriber.unsubscribe()
+    subscriber.disconnect()
+    io.disconnectSockets();
+})
+
+if (subscriber.status === 'close') {
+    console.log('closed connection to redis')
+}
+
+server.listen(port, () => console.log(`WebSocket server online at port: ${port}`));
 
 
 
