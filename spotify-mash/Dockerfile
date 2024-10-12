@@ -7,16 +7,16 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json
 # to the /app working directory
-COPY package*.json tsconfig*.json tailwind.config.ts /app/
 
-RUN apk update && npm install
+COPY tsconfig*.json tailwind.config.ts package*.json /app/
 
-#Copy the rest of our Next.js folder into /app
-#copy in our source code last, as it changes the most
-COPY . /app
+#If we were to remove it and rely on binding src directory with destination it wont work
+#If you truly want to optimize, you can ignore source file in the COPY command and simply mount into container. 
+#tradeoff is that configurations or package lists wont update
+COPY . /app 
 
+RUN npm install
 # Ensure port 3000 is accessible to our system
 EXPOSE 3000
 
-# Run yarn dev, as we would via the command line 
 CMD ["npm","run","dev"]

@@ -1,0 +1,9 @@
+FROM redis:latest
+
+WORKDIR /
+
+COPY script.sh ./script.sh
+
+RUN chmod +x ./script.sh
+
+EXPOSE 6379

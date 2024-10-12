@@ -5,32 +5,41 @@ version: "3"
 #only use --build with compose up if you plan to rebuild your image before starting container
 services:
   web:
+    # image: australia-southeast1-docker.pkg.dev/spotify-mash-project-live/project-spotify-mash/web:0.2
     build:
       context: ./spotify-mash #context tells docker where to look for dockerFile. If it /frontend then write frontend
       dockerfile: Dockerfile
     container_name: web
     command: sleep infinite
     environment:
-      # NODE_ENV: production 
-      NEXTAUTH_SECRET: 7nVuq++42yjHTSJ6FG9h0I5dMjM3bj3+b/fv92/2Bqc=
-      NEXTAUTH_URL: http://localhost:3000
+      GCP_PROJECT: YOUR_GCP_PROJECT_ID
+      GCP_LOCATION: YOUR_GCP_LOCATION 
+      GCP_QUEUE: YOUR_GCP_QUEUE_ID 
+      GCP_SERVICE_ACCOUNT_EMAIL: YOUR_GCP_SERVICE_ACCOUNT
+      GCP_TARGET_RESOURCE: YOUR_GCP_TARGET_RESOURCE
+      NEXTAUTH_SECRET: YOUR_NEXTAUTH_SECRET
+      NEXTAUTH_URL: YOUR_NEXTAUTH_URL
       SPOTIFY_CLIENT_ID: YOUR_SPOTIFY_CLIENT_ID
       SPOTIFY_CLIENT_SECRET: YOUR_SPOTIFY_CLIENT_SECRET
+      GOOGLE_APPLICATION_CREDENTIALS: /app/adc.json
     volumes:
       - ./spotify-mash/public:/app/public
       - ./spotify-mash/src:/app/src
       - ./spotify-mash/package.json:/app/package.json
       - /app/node_modules
       - ./spotify-mash/next.config.js:/app/next.config.js
+      # - ./spotify-mash/adc.json:/app/adc.json
     ports:
       - 3000:3000
     depends_on:
       - redis
   redis:
-    image: redis:latest
     container_name: redis_server
+    build: 
+      dockerfile: DockerFile.redis
     ports:
       - 6379:6379
+    command: /bin/sh -c "./script.sh & redis-server"
   backend:
     container_name: backend
     build:

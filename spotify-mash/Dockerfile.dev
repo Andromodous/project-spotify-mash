@@ -4,9 +4,9 @@ ARG SOCKET_RESOURCE_URL
 
 WORKDIR /app
 
-COPY package*.json tsconfig*.json ./
+COPY package*.json tailwind.config.ts tsconfig*.json ./
 
-COPY . .
+COPY . /app
 
 RUN npm install && NEXT_PUBLIC_SOCKET_RESOURCE=${SOCKET_RESOURCE_URL} npm run build
 
@@ -14,7 +14,7 @@ FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
 COPY --from=build /app/next.config.js /app/next.config.js
 

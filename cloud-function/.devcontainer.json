@@ -5,7 +5,7 @@
     ],
     "service": "function",
     // "shutdownAction": "none",
-    "postCreateCommand": "pip install -r function/requirements.txt",
+    "postCreateCommand": "pip install -r email-function/requirements.txt",
     "features": {
         "ghcr.io/dhoeric/features/google-cloud-cli:1": {
         }
