@@ -1,14 +1,12 @@
 import functions_framework
-import redis
-import json
 from datetime import datetime
+import redis
 import os
+import json
 
 @functions_framework.http
 def handler(request) -> str:
     
-    print("starting function")
-
     try:
         date = datetime.now()  # get current date
         curDate = date

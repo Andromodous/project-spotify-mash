@@ -29,7 +29,6 @@ export const authOption: NextAuthOptions = {
             }
             //case where token has not expired and subsequent invocations
             else if (typeof token.expires_at === 'number' && (Date.now() / 1000) < token.expires_at) {
-                // console.log(token) // ✅✅
                 return token
             }
             else {
@@ -55,6 +54,9 @@ export const authOption: NextAuthOptions = {
                 }
                 catch (e) {
                     console.log(`could not refresh access token for ${token.email}`)
+                    if (e instanceof Error) {
+                        console.log(`refresh access token, Error instance ${e.message}`)
+                    }
                 }
                 finally {
                     return token
@@ -63,7 +65,6 @@ export const authOption: NextAuthOptions = {
         },
         async session({ token, session }) {
             session.accessToken = token.accessToken
-            // console.log(session)
             return session
         }
     }

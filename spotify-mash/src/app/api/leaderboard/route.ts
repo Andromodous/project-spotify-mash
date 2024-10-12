@@ -1,6 +1,6 @@
+import { createHttpTask } from 'a/app/functions/createHttpTask';
 import Redis from 'ioredis'
 import { NextRequest, NextResponse } from 'next/server'
-
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     try {
         //sanatize input
-        if (userId == '' || artist == '') { //        //extract data from body and check for validity
+        if (userId == '' || artist == '') { //extract data from body and check for validity
             throw new Error('one of the fields are missing');
         }
         function removeSpecialCharacters(inputString: string): string {
@@ -44,18 +44,25 @@ export async function POST(request: NextRequest) {
         const leaderboard = await redis.zrevrange('leaderboard', 0, 5, 'WITHSCORES');
 
         await redis.publish('artists:leaderboard', JSON.stringify(leaderboard));
-        console.log("Published updated leaderboard");
+
+        const userNotification = await redis.get(`user:${userId}:email-notifications`);
+                
+        if ((typeof userNotification === 'string' && userNotification === 'TRUE') || typeof userNotification === 'object') { //JS Feature
+            if (typeof userNotification === 'object') { //if user has not set email notification preference
+                await redis.set(`user:${userId}:email-notifications`, 'TRUE')
+            }
+            const response = await createHttpTask(userId, artist)
+            //console.log(JSON.stringify(response))
+        }
 
         return NextResponse.json({ voted: true }, { status: 200 }); //successful
     }
     catch (e) {
-        console.log(`${e}`);
         if (e instanceof Error) {
             return NextResponse.json({ error: e.message }, { status: 404 });
         }
     }
     finally {
-        console.log(`redis client exited`);
         redis.quit();
     }
 }

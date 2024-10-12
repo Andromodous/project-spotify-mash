@@ -8,7 +8,7 @@ import NextAuthProvider from 'a/components/NextAuthProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'musical-mash',
+  title: 'Music-Mash',
   description: 'private project',
 }
 

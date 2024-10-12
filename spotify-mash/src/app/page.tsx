@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { initSocket } from 'a/app/lib/socket'
+import { initSocket, resource } from 'a/app/lib/socket'
 import { processArtist } from './functions/processArtist'
 import { ArtistLeaderboard } from 'a/components/ArtistLeaderboard'
 import { getDeadline } from 'a/app/functions/getDeadline'
@@ -10,6 +10,7 @@ import { Poll } from 'a/app/lib/interface.poll'
 import { isWinner } from 'a/app/lib/guard.winner'
 import { WinnersBanner } from 'a/components/WinnersBanner'
 import { useSession } from 'next-auth/react'
+import { parsePayload } from './functions/parsePayload'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,22 +28,36 @@ export default function Home() {
   const [pollEnd, setPollEnd] = useState<string>('');
   const [pastpolls, setPastPolls] = useState<Winner[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { //serve poll to user upon refresh from storage
+    const key = 'stored_payload'
+    const poll_load = localStorage.getItem(key);
+    if (typeof poll_load === 'string') {
+      const { payload, source } = JSON.parse(poll_load);
+      const expiry_date = new Date(new Date().getFullYear(), new Date().getMonth(), 28).getTime() / 1000
+
+      if (source !== resource || Date.now() / 1000 > expiry_date) { //if the websocket source is different or date or poll has ended
+        localStorage.removeItem(key)
+      }
+      else {
+        const { artists, artistscores } = parsePayload(payload)
+
+        //set the new states
+        setLabels([...artists]);
+        setScore([...artistscores]);
+      }
+    }
+  }, [])
+
+  useEffect(() => { //attach to websocket and process payloads sent by the websocket
     const socket = initSocket()
     socket.on('reconnect', (attempt) => console.log(`client successfully connected: after ${attempt} times!`))
     socket.on('message', (message) => {
-      const data = JSON.parse(message)
+      const payload = JSON.parse(message)
 
-      //parse data
-      const artists = [], artistscores = []
-      for (var i = 0; i < data.length - 2; i++) {
-        if (i % 2 == 0) {
-          artists.push(data[i]);
-        }
-        else {
-          artistscores.push(parseInt(data[i]));
-        }
-      }
+      localStorage.setItem('stored_payload', JSON.stringify({ payload, 'source': resource }))
+
+      const { artists, artistscores } = parsePayload(payload)
+
       //set the new states
       setLabels([...artists]);
       setScore([...artistscores]);
@@ -57,7 +72,7 @@ export default function Home() {
   useEffect(() => {
     try {
       const store = localStorage.getItem('s2EupNhv71RuhVDJ')
-      if (typeof store === 'string') {
+      if (typeof store === 'string') { //if the poll details exist in json string
         const poll_data: Poll = JSON.parse(store);
         if (typeof poll_data.time === 'number' && poll_data.time > (new Date().getTime() / 1000)) { //current poll not yet expired
           const date = new Date(poll_data.time as number * 1000)
@@ -69,7 +84,7 @@ export default function Home() {
             setPastPolls(polls as Winner[]) //limitation of typescript inference
           }
         }
-        else {
+        else { //if the json in local storage does not exist
           throw 1
         }
       }
@@ -113,7 +128,12 @@ export default function Home() {
         throw new Error('you cannot leave artist blank.');
       }
       if (status == 'authenticated') {
-        await processArtist(session.user?.email as string, artist);
+        if (typeof session.user === 'object' && typeof session.user.email === 'string') {
+          await processArtist(session.user.email as string, artist);
+        }
+        else {
+          throw new Error('could not identify your account');
+        }
       }
       else {
         throw new Error('you are not signed in')

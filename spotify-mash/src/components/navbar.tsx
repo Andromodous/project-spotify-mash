@@ -12,7 +12,7 @@ const Navbar = () => {
       <nav className='container mx-auto px-1 drop-shadow-lg'>
         <div className='flex items-center justify-evenly sm:justify-between'>
           <h1 className='hidden sm:inline sm:text-2xl font-extrabold text-slate-900/75 tracking-tight dark:text-slate-200'>
-            musical mash
+            music mash
           </h1>
           {status == 'authenticated' &&
             <p className='hidden md:inline font-bold'>
