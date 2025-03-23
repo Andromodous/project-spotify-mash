@@ -59,7 +59,7 @@ jobs:
       - name: 'Build and Push Container'
         run: |-
           DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
-          docker build --build-arg SOCKET_RESOURCE_URL=${{ secrets.SOCKET_RESOURCE }} --file="./spotify-mash/Dockerfile.dev" --tag "$DOCKER_TAG" .
+          docker build --build-arg SOCKET_RESOURCE_URL=${{ secrets.SOCKET_RESOURCE }} --file="Dockerfile.dev" --tag "$DOCKER_TAG" ./spotify-mash
           docker push "${DOCKER_TAG}"      
       
       - name: 'Deploy to Cloud Run'
