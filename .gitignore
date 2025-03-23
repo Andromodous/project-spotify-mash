@@ -8,10 +8,12 @@
 /spotify-mash/spotify-api.http
 /spotify-mash/next-env.d.ts
 spotify-api.http
+/spotify-mash/adc.json
 
 #backend development artifacts
 /backend/dist
 /backend/node_modules
+gha-creds-*.json
 
 #cloud function development artifacts
 /cloud-function/.vscode/

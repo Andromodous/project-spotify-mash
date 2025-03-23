@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     })
 
     try {
-        //sanatize input
+        // sanatize input
         if (userId == '' || artist == '') { //extract data from body and check for validity
             throw new Error('one of the fields are missing');
         }
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
                 await redis.set(`user:${userId}:email-notifications`, 'TRUE')
             }
             const response = await createHttpTask(userId, artist)
-            //console.log(JSON.stringify(response))
+            console.log(JSON.stringify(response))
         }
 
         return NextResponse.json({ voted: true }, { status: 200 }); //successful

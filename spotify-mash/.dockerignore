@@ -3,3 +3,4 @@
 spotify-api.http
 README.md
 adc.json
+gha-creds-*.json

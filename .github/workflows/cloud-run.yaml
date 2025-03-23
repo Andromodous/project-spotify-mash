@@ -1,0 +1,93 @@
+# This workflow build and push a Docker container to Google Artifact Registry
+# and deploy it on Cloud Run when a commit is pushed to the "main"
+# branch.
+#
+# To configure this workflow:
+#
+# 1. Enable the following Google Cloud APIs:
+#
+#    - Artifact Registry (artifactregistry.googleapis.com)
+#    - Cloud Run (run.googleapis.com)
+#    - IAM Credentials API (iamcredentials.googleapis.com)
+#
+# 2. Create and configure a Workload Identity Provider for GitHub:
+#    https://github.com/google-github-actions/auth#preferred-direct-workload-identity-federation.
+#
+#    Depending on how you authenticate, you will need to grant an IAM principal
+#    permissions on Google Cloud:
+#    - Artifact Registry Administrator (roles/artifactregistry.admin)
+#    - Cloud Run Developer (roles/run.developer)
+#
+name: 'Build and Deploy to Cloud Run'
+on:
+  push:
+    branches:
+      - "main"
+env:
+  REGION: ${{ secrets.PROJECT_REGION }} # TODO: update to your region
+  SERVICE: 'web' # TODO: update to your service name
+
+jobs:
+  deploy:
+    runs-on: 'ubuntu-latest'
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4' # actions/checkout@v4
+        
+      # Configure Workload Identity Federation and generate an access token.
+      # See https://github.com/google-github-actions/auth for more options,
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with: #WIP input are for authenticating to Google Cloud via Workload Identity Federation.
+          workload_identity_provider: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}' # The Workload Identity Provider for GitHub
+          project_id: '${{ secrets.PROJECT_ID }}'
+
+      # BEGIN - Docker auth and build
+      - name: 'Docker Auth'
+        uses: 'docker/login-action@v3'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.auth_token }}'
+          registry: '${{ env.REGION }}-docker.pkg.dev'
+
+      - name: 'Build and Push Container'
+        run: |-
+          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          docker build --build-arg SOCKET_RESOURCE_URL=${{ secrets.SOCKET_RESOURCE }} --file=Dockerfile.dev --tag "$DOCKER_TAG" ./spotify-mash
+          docker push "${DOCKER_TAG}"      
+      
+      - name: 'Deploy to Cloud Run'
+        uses: 'google-github-actions/deploy-cloudrun@v2' # google-github-actions/deploy-cloudrun@v2
+        with:
+          service: '${{ env.SERVICE }}'
+          region: '${{ env.REGION }}'
+          env_vars: |-
+            ${{ secrets.ENV_SEC_CONSOLIDATED }}
+          image: '${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}'    
+
+  check-status:
+    runs-on: 'ubuntu-latest'
+    needs: 'deploy'
+    steps:
+      - name: 'Check deployment status'
+        run: |-
+          counter=0
+          until [ curl -s -o /dev/null -w "%{http_code}" https://web-hhqrwytvra-ts.a.run.app/ -eq 200 ]; do 
+            echo "Waiting for deployment..."
+            counter=$((counter+1))
+            if [ $counter -eq 30]; then
+              echo "Deployment failed"
+              exit 1
+            fi
+            sleep 5
+          done
+          echo "Deployment successful"
+          exit 0
+          
+

@@ -9,10 +9,8 @@ from datetime import datetime
 def handler(request) -> str:
 
     try:
-        base64_payload = request.data.decode('utf-8')
-
-        decoded_json_string = base64.b64decode(base64_payload).decode('utf-8')
-        data = json.loads(decoded_json_string) #deserialize string into json
+        # print(request.data)
+        data = json.loads(request.data)
         print(data)
 
         email, artist = data['userId'], data['artist']
