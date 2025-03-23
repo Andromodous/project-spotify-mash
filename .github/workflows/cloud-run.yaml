@@ -46,7 +46,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with: #WIP input are for authenticating to Google Cloud via Workload Identity Federation.
           workload_identity_provider: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}' # The Workload Identity Provider for GitHub
-          project_id: '${{ secrets.PROJECT_ID }}'
+          project_id: ${{ secrets.PROJECT_ID }}
 
       # BEGIN - Docker auth and build
       - name: 'Docker Auth'
@@ -59,7 +59,7 @@ jobs:
       - name: 'Build and Push Container'
         run: |-
           DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
-          docker build --build-arg SOCKET_RESOURCE_URL=${{ secrets.SOCKET_RESOURCE }} --file=Dockerfile.dev --tag "$DOCKER_TAG" ./spotify-mash
+          docker build --build-arg SOCKET_RESOURCE_URL=${{ secrets.SOCKET_RESOURCE }} --file=/spotify-mash/Dockerfile.dev --tag "$DOCKER_TAG" .
           docker push "${DOCKER_TAG}"      
       
       - name: 'Deploy to Cloud Run'
