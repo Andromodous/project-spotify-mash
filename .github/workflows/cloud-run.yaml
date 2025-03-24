@@ -80,10 +80,10 @@ jobs:
       - name: 'Check deployment status'
         run: |-
           counter=0
-          until [ curl -s -o /dev/null -w "%{http_code}" https://web-hhqrwytvra-ts.a.run.app/ -eq 200 ]; do 
+          until [ curl --silent --output /dev/null -w "%{http_code}" https://web-hhqrwytvra-ts.a.run.app/ -eq 200 ]; do 
             echo "Waiting for deployment..."
             counter=$((counter+1))
-            if [ $counter -eq 30]; then
+            if [ $counter -eq 30 ]; then
               echo "Deployment failed"
               exit 1
             fi
