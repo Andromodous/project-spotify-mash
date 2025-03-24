@@ -45,17 +45,18 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with: #WIP input are for authenticating to Google Cloud via Workload Identity Federation.
-          workload_identity_provider: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}' # The Workload Identity Provider for GitHub
-          service_account: '${{ secrets.SERVICE_ACCOUNT }}' # The service account to impersonate
-          project_id: '${{ secrets.PROJECT_ID }}'
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} # The Workload Identity Provider for GitHub
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # The service account to impersonate
+          project_id: ${{ secrets.PROJECT_ID }}
+          token_format: 'access_token'
 
       # BEGIN - Docker auth and build
       - name: 'Docker Auth'
         uses: 'docker/login-action@v3'
         with:
-          username: 'oauth2accesstoken'
-          password: '${{ steps.auth.outputs.auth_token }}'
-          registry: '${{ env.REGION }}-docker.pkg.dev'
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+          registry: ${{ env.REGION }}-docker.pkg.dev
 
       - name: 'Build and Push Container'
         run: |-
@@ -66,8 +67,8 @@ jobs:
       - name: 'Deploy to Cloud Run'
         uses: 'google-github-actions/deploy-cloudrun@v2' # google-github-actions/deploy-cloudrun@v2
         with:
-          service: '${{ env.SERVICE }}'
-          region: '${{ env.REGION }}'
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
           env_vars: |-
             ${{ secrets.ENV_SEC_CONSOLIDATED }}
           image: '${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}'    
