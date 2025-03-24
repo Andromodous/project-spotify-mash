@@ -46,6 +46,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with: #WIP input are for authenticating to Google Cloud via Workload Identity Federation.
           workload_identity_provider: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}' # The Workload Identity Provider for GitHub
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # The service account to impersonate
           project_id: ${{ secrets.PROJECT_ID }}
 
       # BEGIN - Docker auth and build
