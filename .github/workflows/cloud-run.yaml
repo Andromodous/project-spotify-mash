@@ -71,7 +71,7 @@ jobs:
           region: ${{ env.REGION }}
           env_vars: |-
             ${{ secrets.ENV_SEC_CONSOLIDATED }}
-          image: '${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}'    
+          image: '${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REPO_NAME }}/${{ env.SERVICE }}:${{ github.sha }}'    
 
   check-status:
     runs-on: 'ubuntu-latest'
