@@ -22,4 +22,4 @@ RUN npm install --production
 
 EXPOSE 8080
 
-CMD npm run start
+CMD node dist/server.js
