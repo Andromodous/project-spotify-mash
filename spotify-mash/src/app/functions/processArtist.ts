@@ -10,6 +10,7 @@ export async function processArtist(userId: string, artist: string) {
     const data = await res.json();
     if (!res.ok) {
         const { error } = data;
+        console.log(`error: ${error}`)        
         throw new Error(error)
     }
 }

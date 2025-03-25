@@ -1,4 +1,5 @@
 import { createHttpTask } from 'a/app/functions/createHttpTask';
+import moment  from 'moment'
 import Redis from 'ioredis'
 import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
@@ -27,10 +28,13 @@ export async function POST(request: NextRequest) {
         }
         artist = removeSpecialCharacters(artist)
 
-        const exists = await redis.exists('artists:leaderboard:expire')
-        if (exists == 0) {
+        const pollEnd = await redis.get('artists:leaderboard:expire')
+
+        const now = moment().unix()
+        if (typeof pollEnd === 'string' && parseInt(pollEnd) < now) {    
             throw new Error('all votes have been cast, poll is no longer active. come back for the next poll');
         }
+        
         // check if user voted before
         const voted = await redis.sismember('artists:leaderboard:voted', userId); //1 (means true, and if it's 0, it means false)
         if (voted == 0) {
@@ -59,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
     catch (e) {
         if (e instanceof Error) {
-            return NextResponse.json({ error: e.message }, { status: 404 });
+            return NextResponse.json({ error: e.message }, { status: 400 });
         }
     }
     finally {

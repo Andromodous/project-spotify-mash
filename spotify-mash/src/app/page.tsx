@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { initSocket, resource } from 'a/app/lib/socket'
+import { initSocket } from 'a/app/lib/socket'
 import { processArtist } from './functions/processArtist'
 import { ArtistLeaderboard } from 'a/components/ArtistLeaderboard'
 import { getDeadline } from 'a/app/functions/getDeadline'
@@ -11,6 +11,7 @@ import { isWinner } from 'a/app/lib/guard.winner'
 import { WinnersBanner } from 'a/components/WinnersBanner'
 import { useSession } from 'next-auth/react'
 import { parsePayload } from './functions/parsePayload'
+import moment from 'moment'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,20 +31,23 @@ export default function Home() {
 
   useEffect(() => { //serve poll to user upon refresh from storage
     const key = 'stored_payload'
-    const poll_load = localStorage.getItem(key);
-    if (typeof poll_load === 'string') {
-      const { payload, source } = JSON.parse(poll_load);
-      const expiry_date = new Date(new Date().getFullYear(), new Date().getMonth(), 28).getTime() / 1000
+    if (status != 'unauthenticated' ) {
+      const poll_load = localStorage.getItem(key);
+      if (typeof poll_load === 'string') {
+        const { payload } = JSON.parse(poll_load);
+        const expiry_date = moment().date(28).startOf("day").unix();
+        const now = moment().unix()
 
-      if (source !== resource || Date.now() / 1000 > expiry_date) { //if the websocket source is different or date or poll has ended
-        localStorage.removeItem(key)
-      }
-      else {
-        const { artists, artistscores } = parsePayload(payload)
+        if (expiry_date > now ) { //poll has ended
+          localStorage.removeItem(key)
+        }
+        else {
+          const { artists, artistscores } = parsePayload(payload)
 
-        //set the new states
-        setLabels([...artists]);
-        setScore([...artistscores]);
+          //set the new states
+          setLabels([...artists]);
+          setScore([...artistscores]);
+        }
       }
     }
   }, [])
@@ -53,8 +57,7 @@ export default function Home() {
     socket.on('reconnect', (attempt) => console.log(`client successfully connected: after ${attempt} times!`))
     socket.on('message', (message) => {
       const payload = JSON.parse(message)
-
-      localStorage.setItem('stored_payload', JSON.stringify({ payload, 'source': resource }))
+      localStorage.setItem('stored_payload', JSON.stringify({ payload }))
 
       const { artists, artistscores } = parsePayload(payload)
 
