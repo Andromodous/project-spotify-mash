@@ -113,7 +113,7 @@ jobs:
         with:
           service: ${{ env.SERVICE2 }}
           region: ${{ env.REGION }}
-          flags: --port=8080 --command="node dist/server.js"    
+          flags: --port=8080 --command="node","dist/server.js"    
           env_vars: |-
             ${{ secrets.ENV_SEC_CONSOLIDATED_BACKEND }}
           image: '${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REPO_NAME }}/${{ env.SERVICE2 }}:${{ github.sha }}'
