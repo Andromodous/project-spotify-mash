@@ -27,3 +27,5 @@ cloud-function/email-function/__pycache__
 
 #documenting/ learning
 notes.txt
+
+docker-compose.yml
