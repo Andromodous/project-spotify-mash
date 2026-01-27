@@ -23,6 +23,12 @@ on:
   push:
     branches:
       - "main"
+  workflow_dispatch:
+    inputs:
+      deploy-environment:
+        description: 'Deploy to environment'
+        required: true
+        default: 'production'
 env:
   REGION: ${{ secrets.PROJECT_REGION }} # TODO: update to your region
   SERVICE1: ${{ secrets.FRONTEND }} # TODO: update to your service name
